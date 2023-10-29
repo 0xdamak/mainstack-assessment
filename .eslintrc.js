@@ -30,5 +30,10 @@ module.exports = {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/triple-slash-reference": "off",
   },
-  ignorePatterns: [".eslintrc.js", "next.config.js", "postcss.config.js"],
+  ignorePatterns: [
+    ".eslintrc.js",
+    "next.config.js",
+    "postcss.config.js",
+    "prettier.config.js",
+  ],
 };
