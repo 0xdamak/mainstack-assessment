@@ -1,7 +1,7 @@
 "use client";
 
 import { type ITransaction } from "../models/transaction";
-import { type FilterOptions } from "../components/FilterControls";
+import { type IFilterOptions } from "../models/filterOptions";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../hooks/useGetUserQuery";
 import { useGetTransactionsQuery } from "../hooks/useGetTransactionsQuery";
@@ -33,7 +33,7 @@ export default function Home(): JSX.Element {
     isError: walletError,
   } = useGetWalletQuery();
 
-  function filterTransactions(filterOptions: FilterOptions): void {
+  function filterTransactions(filterOptions: IFilterOptions): void {
     if (allTransactions === undefined) return;
     const { startDate, endDate, transactionTypes, transactionStatuses } =
       filterOptions;
