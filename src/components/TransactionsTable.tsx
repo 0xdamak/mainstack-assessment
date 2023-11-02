@@ -17,6 +17,7 @@ import Receipt from "@/public/svgs/receipt.svg?svgr";
 import ArrowInward from "@/public/svgs/arrow-inward.svg?svgr";
 import ArrowOutward from "@/public/svgs/arrow-outward.svg?svgr";
 import Export from "@/public/svgs/export.svg?svgr";
+import dayjs from "dayjs";
 
 interface Props {
   transactions: ITransaction[] | null;
@@ -83,7 +84,15 @@ export default function TransactionsTable({
               {transactions?.length} Transactions
             </h1>
             <p className="font-medium text-gray-400">
-              Your transactions for All Time
+              {formik.values.startDate.length > 0 &&
+              formik.values.endDate.length > 0 &&
+              allTransactions !== transactions
+                ? `Your transaction(s) from ${dayjs(
+                    formik.values.startDate,
+                  ).format("MMM-DD")} to ${dayjs(formik.values.endDate).format(
+                    "MMM-DD",
+                  )}`
+                : "Your transactions for All Time"}
             </p>
           </div>
           <div className="flex items-center gap-3">
@@ -154,7 +163,7 @@ export default function TransactionsTable({
               <Receipt />
             </div>
             <h1 className="mb-2 text-2.5xl font-bold">
-              No matching transaction found for the selected filter
+              No matching transaction(s) found for the selected filter
             </h1>
             <p className="mb-8 text-base font-medium">
               Change your filters to see more results, or add a new product.
