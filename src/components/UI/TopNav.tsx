@@ -77,7 +77,7 @@ export default function TopNav(): JSX.Element {
   ] as const;
 
   return (
-    <nav className="sticky top-0 mx-4 my-4 h-16 max-w-7xl rounded-7xl shadow-nav xl:mx-auto">
+    <nav className="sticky top-0 mx-4 my-4 h-16 max-w-7xl rounded-7xl bg-white shadow-nav xl:mx-auto">
       <ul className="flex h-full w-full items-center justify-between px-3 lg:justify-normal">
         <li className="w-auto lg:w-1/6">
           <Logo />
