@@ -48,7 +48,8 @@ export default function Home(): JSX.Element {
   }
 
   useEffect(() => {
-    if (allTransactions !== undefined) setTransactions(allTransactions);
+    if (allTransactions !== undefined && allTransactions.length > 0)
+      setTransactions(allTransactions);
   }, [allTransactions]);
 
   if (user === undefined && loadingUser) return <PageLoader />;
@@ -69,6 +70,7 @@ export default function Home(): JSX.Element {
         </div>
         <TransactionsTable
           transactions={transactions}
+          allTransactions={allTransactions}
           loading={loadingTransactions}
           error={transactionsError}
           openFiltersDialog={() => {
