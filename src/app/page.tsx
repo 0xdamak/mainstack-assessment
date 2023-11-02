@@ -1,13 +1,11 @@
 "use client";
 
+import { type ITransaction } from "../models/transaction";
+import { type FilterOptions } from "../components/FilterControls";
 import { useEffect, useState } from "react";
 import { useGetUserQuery } from "../hooks/useGetUserQuery";
 import { useGetTransactionsQuery } from "../hooks/useGetTransactionsQuery";
 import { useGetWalletQuery } from "../hooks/useGetWalletQuery";
-import { type ITransaction } from "../models/transaction";
-import FilterControls, {
-  type FilterOptions,
-} from "../components/FilterControls";
 import TopNav from "@/src/components/UI/TopNav";
 import QuickActions from "../components/UI/QuickActions";
 import WalletInfo from "../components/WalletInfo";
@@ -70,20 +68,18 @@ export default function Home(): JSX.Element {
           openFiltersDialog={() => {
             setFiltersDialog(true);
           }}
+          display={filtersDialog}
+          closeFilterDialog={() => {
+            setFiltersDialog(false);
+          }}
+          applyFilters={(options) => {
+            filterTransactions(options);
+          }}
+          resetFilters={() => {
+            allTransactions !== undefined && setTransactions(allTransactions);
+          }}
         />
       </main>
-      <FilterControls
-        display={filtersDialog}
-        close={() => {
-          setFiltersDialog(false);
-        }}
-        handleSubmit={(options) => {
-          filterTransactions(options);
-        }}
-        reset={() => {
-          allTransactions !== undefined && setTransactions(allTransactions);
-        }}
-      />
     </>
   );
 }
