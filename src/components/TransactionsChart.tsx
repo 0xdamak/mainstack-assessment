@@ -1,5 +1,6 @@
 import { type ITransaction } from "../models/transaction";
 import { type ChartData } from "chart.js";
+import { useGetWalletQuery } from "../hooks/useGetWalletQuery";
 import { formatToUSD } from "../helpers/formatToUSD";
 import { BaseButton } from "./UI/Buttons";
 import { LineChart } from "./UI/Charts";
@@ -12,6 +13,7 @@ interface Props {
 export default function TransactionsChart({
   transactions,
 }: Props): JSX.Element {
+  const { data: wallet } = useGetWalletQuery();
   const chartData = {
     labels: transactions?.map((transaction) =>
       dayjs(transaction.date).format("MMM-DD"),
@@ -36,7 +38,7 @@ export default function TransactionsChart({
         <div>
           <p className="text-sm text-gray-400">Available Balance</p>
           <h1 className="text-2xl font-bold sm:text-2.5xl">
-            {formatToUSD(125000)}
+            {formatToUSD(wallet?.balance)}
           </h1>
         </div>
         <BaseButton
