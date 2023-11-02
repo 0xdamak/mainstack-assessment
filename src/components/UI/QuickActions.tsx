@@ -8,12 +8,13 @@ import QuickActionInvoicing from "@/public/svgs/quick-action-invoicing.svg?svgr"
 export default function QuickActions(): JSX.Element {
   const actions = [
     {
+      title: "Link in Bio",
       icon: <QuickActionLink />,
       onClick: () => {},
     },
-    { icon: <QuickActionStore />, onClick: () => {} },
-    { icon: <QuickActionMediaKit />, onClick: () => {} },
-    { icon: <QuickActionInvoicing />, onClick: () => {} },
+    { title: "Store", icon: <QuickActionStore />, onClick: () => {} },
+    { title: "Media Kit", icon: <QuickActionMediaKit />, onClick: () => {} },
+    { title: "Invoicing", icon: <QuickActionInvoicing />, onClick: () => {} },
   ];
 
   return (
@@ -22,9 +23,12 @@ export default function QuickActions(): JSX.Element {
         <li
           key={index}
           onClick={action.onClick}
-          className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full mix-blend-luminosity duration-300 hover:bg-gray-50 hover:mix-blend-normal"
+          className="relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-full mix-blend-luminosity duration-300 hover:bg-gray-50 hover:mix-blend-normal [&>span]:hover:opacity-100"
         >
           {action.icon}
+          <span className="pointer-events-none absolute left-10 whitespace-nowrap rounded-md bg-black-300 px-3 py-2 text-sm text-white opacity-0 transition-opacity">
+            {action.title}
+          </span>
         </li>
       ))}
     </ul>
