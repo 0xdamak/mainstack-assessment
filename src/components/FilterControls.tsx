@@ -1,115 +1,57 @@
-import { useFormik } from "formik";
+import { status } from "../helpers/transactionStatuses";
+import { types } from "../helpers/transactionTypes";
 import { BaseButton } from "./UI/Buttons";
-import * as Yup from "yup";
 import Modal from "./UI/Modal";
 import MultiSelect from "./UI/MultiSelect";
 import dayjs from "dayjs";
 
 interface Props {
+  formik: any;
   display: boolean;
   close: () => void;
-  handleSubmit: (options: FilterOptions) => void;
   reset: () => void;
 }
-
-export interface FilterOptions {
-  startDate: string;
-  endDate: string;
-  transactionTypes: string[];
-  transactionStatuses: string[];
-}
-
-export const initialValues = {
-  startDate: "",
-  endDate: "",
-  transactionTypes: [],
-  transactionStatuses: [],
-};
 
 export default function FilterControls({
   display,
   close,
-  handleSubmit,
+  formik,
   reset,
 }: Props): JSX.Element {
-  const status = ["pending", "successful", "failed"] as const;
-  const types = [
-    "store_transactions",
-    "get_tipped",
-    "withdrawal",
-    "deposit",
-    "charge_backs",
-    "cash_backs",
-    "refer_&_earn",
-  ] as const;
   const presets = [
     { label: "Today", dateFunction: setToday },
     { label: "Last 7 days", dateFunction: setLast7Days },
     { label: "This month", dateFunction: setThisMonth },
     { label: "Last 3 months", dateFunction: setLast3Months },
   ] as const;
-  const validationSchema = Yup.object().shape({
-    startDate: Yup.string().required("Select start date"),
-    endDate: Yup.string().required("Select end date"),
-    transactionTypes: Yup.array()
-      .of(Yup.string().oneOf(types))
-      .min(1, "Select at least one type"),
-    transactionStatuses: Yup.array()
-      .of(Yup.string().oneOf(status))
-      .min(1, "Select at least one status"),
-  });
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => {
-      handleSubmit(values);
-      close();
-    },
-  });
 
   function setToday(): void {
-    formik
-      .setValues({
-        ...formik.values,
-        startDate: dayjs().format("YYYY-MM-DD"),
-        endDate: dayjs().format("YYYY-MM-DD"),
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    formik.setValues({
+      ...formik.values,
+      startDate: dayjs().format("YYYY-MM-DD"),
+      endDate: dayjs().format("YYYY-MM-DD"),
+    });
   }
   function setLast7Days(): void {
-    formik
-      .setValues({
-        ...formik.values,
-        startDate: dayjs().subtract(7, "day").format("YYYY-MM-DD"),
-        endDate: dayjs().format("YYYY-MM-DD"),
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    formik.setValues({
+      ...formik.values,
+      startDate: dayjs().subtract(7, "day").format("YYYY-MM-DD"),
+      endDate: dayjs().format("YYYY-MM-DD"),
+    });
   }
   function setThisMonth(): void {
-    formik
-      .setValues({
-        ...formik.values,
-        startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
-        endDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    formik.setValues({
+      ...formik.values,
+      startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+      endDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+    });
   }
   function setLast3Months(): void {
-    formik
-      .setValues({
-        ...formik.values,
-        startDate: dayjs().subtract(3, "month").format("YYYY-MM-DD"),
-        endDate: dayjs().format("YYYY-MM-DD"),
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    formik.setValues({
+      ...formik.values,
+      startDate: dayjs().subtract(3, "month").format("YYYY-MM-DD"),
+      endDate: dayjs().format("YYYY-MM-DD"),
+    });
   }
 
   return (

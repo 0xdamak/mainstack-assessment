@@ -1,9 +1,15 @@
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { type IFilterOptions } from "../models/filterOptions";
 import { type ITransaction } from "../models/transaction";
-import FilterControls, { type FilterOptions } from "./FilterControls";
+import FilterControls from "./FilterControls";
 import { BaseButton } from "./UI/Buttons";
 import { formatToUSD } from "../helpers/formatToUSD";
 import { formatDate } from "../helpers/formatDate";
 import { clsx } from "clsx";
+import { status } from "../helpers/transactionStatuses";
+import { types } from "../helpers/transactionTypes";
+import { countActiveFilters } from "../helpers/countActiveFilters";
 import ActivityIndicator from "./UI/ActivityIndicator";
 import ErrorMessage from "./UI/ErrorMessage";
 import ChevronDown from "@/public/svgs/chevron-down.svg?svgr";
@@ -21,7 +27,7 @@ interface Props {
 
   display: boolean;
   closeFilterDialog: () => void;
-  applyFilters: (options: FilterOptions) => void;
+  applyFilters: (options: IFilterOptions) => void;
   resetFilters: () => void;
 }
 
@@ -36,6 +42,31 @@ export default function TransactionsTable({
   applyFilters,
   resetFilters,
 }: Props): JSX.Element {
+  const initialValues = {
+    startDate: "",
+    endDate: "",
+    transactionTypes: [],
+    transactionStatuses: [],
+  };
+  const validationSchema = Yup.object().shape({
+    startDate: Yup.string().required("Select start date"),
+    endDate: Yup.string().required("Select end date"),
+    transactionTypes: Yup.array()
+      .of(Yup.string().oneOf(types))
+      .min(1, "Select at least one type"),
+    transactionStatuses: Yup.array()
+      .of(Yup.string().oneOf(status))
+      .min(1, "Select at least one status"),
+  });
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      applyFilters(values);
+      closeFilterDialog();
+    },
+  });
+
   if (transactions === null && loading) {
     return <ActivityIndicator text="Loading transactions" />;
   }
@@ -52,12 +83,17 @@ export default function TransactionsTable({
               {transactions?.length} Transactions
             </h1>
             <p className="font-medium text-gray-400">
-              Your transactions for the last 7 days
+              Your transactions for All Time
             </p>
           </div>
           <div className="flex items-center gap-3">
             <BaseButton
               text="Filter"
+              badgeNumber={
+                countActiveFilters(formik.values) > 0
+                  ? countActiveFilters(formik.values)
+                  : undefined
+              }
               icon={<ChevronDown />}
               onClick={openFiltersDialog}
             />
@@ -123,7 +159,13 @@ export default function TransactionsTable({
             <p className="mb-8 text-base font-medium">
               Change your filters to see more results, or add a new product.
             </p>
-            <BaseButton text="Clear Filter" />
+            <BaseButton
+              text="Clear Filter"
+              onClick={() => {
+                formik.resetForm();
+                resetFilters();
+              }}
+            />
           </div>
         )}
         {allTransactions?.length === 0 && (
@@ -139,11 +181,9 @@ export default function TransactionsTable({
         )}
       </section>
       <FilterControls
+        formik={formik}
         display={display}
         close={closeFilterDialog}
-        handleSubmit={(options) => {
-          applyFilters(options);
-        }}
         reset={resetFilters}
       />
     </>
