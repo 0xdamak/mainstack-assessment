@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useGetUserQuery } from "@/src/hooks/useGetUserQuery";
 import { useWindowDimension } from "@/src/hooks/useWindowDimension";
@@ -15,6 +15,7 @@ import NavApps from "@/public/svgs/nav-apps.svg?svgr";
 import NavNotification from "@/public/svgs/nav-notification.svg?svgr";
 import NavChat from "@/public/svgs/nav-chat.svg?svgr";
 import NavHamburger from "@/public/svgs/nav-hamburger.svg?svgr";
+import ChevronDown from "@/public/svgs/chevron-down.svg?svgr";
 import ChevronRight from "@/public/svgs/chevron-right.svg?svgr";
 import QuickActionLink from "@/public/svgs/quick-action-link.svg?svgr";
 import QuickActionStore from "@/public/svgs/quick-action-store.svg?svgr";
@@ -22,6 +23,8 @@ import QuickActionMediaKit from "@/public/svgs/quick-action-media-kit.svg?svgr";
 import QuickActionInvoicing from "@/public/svgs/quick-action-invoicing.svg?svgr";
 
 export default function TopNav(): JSX.Element {
+  const [hoveredAction, setHoveredAction] =
+    useState<(typeof actions)[number]["title"]>("Link in Bio");
   const { data: user } = useGetUserQuery();
   const { width } = useWindowDimension();
   const pathname = usePathname();
@@ -71,10 +74,10 @@ export default function TopNav(): JSX.Element {
       icon: <QuickActionLink />,
       callback: () => {},
     },
-  ];
+  ] as const;
 
   return (
-    <nav className="mx-4 my-4 h-16 max-w-7xl rounded-7xl shadow-nav xl:mx-auto">
+    <nav className="sticky top-0 mx-4 my-4 h-16 max-w-7xl rounded-7xl shadow-nav xl:mx-auto">
       <ul className="flex h-full w-full items-center justify-between px-3 lg:justify-normal">
         <li className="w-auto lg:w-1/6">
           <Logo />
@@ -103,52 +106,67 @@ export default function TopNav(): JSX.Element {
                   )}
                   {link.title === "Apps" && (
                     <Popover className="relative focus-visible:!border-black-300">
-                      <Popover.Button
-                        className={clsx(
-                          "flex items-center gap-1 rounded-7xl px-4 py-2 duration-300 hover:bg-gray-50",
-                          {
-                            "bg-black-300 [&>span]:text-white [&>span]:hover:text-gray-400 [&>svg]:stroke-white [&>svg]:hover:stroke-gray-400":
-                              pathname === link.href,
-                          },
-                        )}
-                      >
-                        {link.icon}
-                        <span className="text-base font-semibold text-gray-400">
-                          {link.title}
-                        </span>
-                      </Popover.Button>
-                      <Transition
-                        enter="transition duration-100 ease-out"
-                        enterFrom="transform scale-95 opacity-0"
-                        enterTo="transform scale-100 opacity-100"
-                        leave="transition duration-75 ease-out"
-                        leaveFrom="transform scale-100 opacity-100"
-                        leaveTo="transform scale-95 opacity-0"
-                      >
-                        <Popover.Panel className="absolute top-7 z-10 w-96 rounded-xl bg-white shadow-lg">
-                          <ul className="p-3">
-                            {actions.map((action) => (
-                              <li
-                                key={encodeURI(action.title)}
-                                className="flex cursor-pointer items-center gap-2 rounded-xl border border-transparent p-4 duration-300 hover:border hover:border-gray-50 hover:shadow-sm [&>svg]:hover:opacity-100"
-                              >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-50">
-                                  {action.icon}
-                                </div>
-                                <div>
-                                  <h3 className="font-semibold">
-                                    {action.title}
-                                  </h3>
-                                  <p className="text-sm text-gray-400">
-                                    {action.description}
-                                  </p>
-                                </div>
-                                <ChevronRight className="ml-auto h-3 w-3 stroke-gray-400 opacity-0 duration-300" />
-                              </li>
-                            ))}
-                          </ul>
-                        </Popover.Panel>
-                      </Transition>
+                      {({ open }) => (
+                        <>
+                          <Popover.Button
+                            className={clsx(
+                              "flex items-center gap-1 rounded-7xl px-4 py-2 duration-300 hover:bg-gray-50",
+                              {
+                                "bg-black-300 [&>span]:text-white [&>span]:hover:text-gray-400 [&>svg]:stroke-white [&>svg]:hover:stroke-gray-400":
+                                  open,
+                              },
+                            )}
+                          >
+                            {link.icon}
+                            <span className="flex items-center pr-2 text-base font-semibold text-gray-400">
+                              {link.title}
+                            </span>
+                            {open && (
+                              <>
+                                <span className="relative w-20 pl-2 text-left text-sm before:absolute before:-left-[2px] before:top-0 before:h-full before:w-[1px] before:bg-gray-50">
+                                  {hoveredAction}
+                                </span>
+                                <ChevronDown className=" shrink-0 stroke-gray-400" />
+                              </>
+                            )}
+                          </Popover.Button>
+                          <Transition
+                            enter="transition duration-100 ease-out"
+                            enterFrom="transform scale-95 opacity-0"
+                            enterTo="transform scale-100 opacity-100"
+                            leave="transition duration-75 ease-out"
+                            leaveFrom="transform scale-100 opacity-100"
+                            leaveTo="transform scale-95 opacity-0"
+                          >
+                            <Popover.Panel className="absolute top-7 z-10 w-96 rounded-xl bg-white shadow-lg">
+                              <ul className="p-3">
+                                {actions.map((action) => (
+                                  <li
+                                    key={encodeURI(action.title)}
+                                    onMouseEnter={() => {
+                                      setHoveredAction(action.title);
+                                    }}
+                                    className="flex cursor-pointer items-center gap-2 rounded-xl border border-transparent p-4 duration-300 hover:border hover:border-gray-50 hover:shadow-sm [&>svg]:hover:opacity-100"
+                                  >
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-md border border-gray-50">
+                                      {action.icon}
+                                    </div>
+                                    <div>
+                                      <h3 className="font-semibold">
+                                        {action.title}
+                                      </h3>
+                                      <p className="text-sm text-gray-400">
+                                        {action.description}
+                                      </p>
+                                    </div>
+                                    <ChevronRight className="ml-auto h-3 w-3 stroke-gray-400 opacity-0 duration-300" />
+                                  </li>
+                                ))}
+                              </ul>
+                            </Popover.Panel>
+                          </Transition>
+                        </>
+                      )}
                     </Popover>
                   )}
                 </li>
