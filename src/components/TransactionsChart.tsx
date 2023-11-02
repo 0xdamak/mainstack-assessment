@@ -45,7 +45,7 @@ export default function TransactionsChart({
           className="ml-auto sm:ml-16"
         />
       </div>
-      <div className="w-full">
+      <div className="w-full [&>canvas]:mx-auto [&>canvas]:md:mx-0">
         <LineChart
           datasetIdKey="daily-sales"
           data={chartData as ChartData<"line">}
