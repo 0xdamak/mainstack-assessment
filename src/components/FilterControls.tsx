@@ -152,10 +152,10 @@ export default function FilterControls({
               type="date"
               className="w-full rounded-xl bg-gray-50 px-4 py-3"
             />
-            {formik.touched.startDate !== undefined &&
-              formik.errors.startDate !== undefined && (
+            {formik.touched.endDate !== undefined &&
+              formik.errors.endDate !== undefined && (
                 <p className="absolute left-0 top-12 my-1 text-xs text-red-500">
-                  {formik.errors.startDate}
+                  {formik.errors.endDate}
                 </p>
               )}
           </div>
