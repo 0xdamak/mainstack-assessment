@@ -14,6 +14,7 @@ import Export from "@/public/svgs/export.svg?svgr";
 
 interface Props {
   transactions: ITransaction[] | null;
+  allTransactions: ITransaction[] | undefined;
   loading: boolean;
   error: boolean;
   openFiltersDialog: () => void;
@@ -26,6 +27,7 @@ interface Props {
 
 export default function TransactionsTable({
   transactions,
+  allTransactions,
   loading,
   error,
   openFiltersDialog,
@@ -122,6 +124,17 @@ export default function TransactionsTable({
               Change your filters to see more results, or add a new product.
             </p>
             <BaseButton text="Clear Filter" />
+          </div>
+        )}
+        {allTransactions?.length === 0 && (
+          <div className="mx-auto max-w-sm py-24">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50">
+              <Receipt />
+            </div>
+            <h1 className="mb-2 text-2.5xl font-bold">No transactions here</h1>
+            <p className="mb-8 text-base font-medium">
+              Create a new transaction
+            </p>
           </div>
         )}
       </section>
