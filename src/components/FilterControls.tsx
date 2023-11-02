@@ -63,6 +63,7 @@ export default function FilterControls({
     validationSchema,
     onSubmit: (values) => {
       handleSubmit(values);
+      close();
     },
   });
 
@@ -112,13 +113,7 @@ export default function FilterControls({
   }
 
   return (
-    <Modal
-      title="Filter"
-      display={display}
-      close={() => {
-        close();
-      }}
-    >
+    <Modal title="Filter" display={display} close={close}>
       <div className="grid grid-cols-2 justify-between gap-2 xs:flex xs:items-center">
         {presets.map((preset) => (
           <button
@@ -132,7 +127,7 @@ export default function FilterControls({
       </div>
       <form
         onSubmit={formik.handleSubmit}
-        className="mt-6 flex h-[90%] flex-col space-y-6"
+        className="mt-6 flex h-[85%] flex-col space-y-6"
       >
         <fieldset className="grid grid-cols-2 gap-2">
           <h3 className="col-span-full mb-3 text-base font-semibold">
