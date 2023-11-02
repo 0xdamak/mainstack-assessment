@@ -127,7 +127,7 @@ export default function FilterControls({
       </div>
       <form
         onSubmit={formik.handleSubmit}
-        className="mt-6 flex h-[85%] flex-col space-y-6"
+        className="mt-6 flex h-[85%] flex-col space-y-6 sm:h-[90%]"
       >
         <fieldset className="grid grid-cols-2 gap-2">
           <h3 className="col-span-full mb-3 text-base font-semibold">
