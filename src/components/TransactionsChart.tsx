@@ -57,7 +57,6 @@ export default function TransactionsChart({
                 callbacks: {
                   label: function (context) {
                     const label = formatToUSD(context.parsed.y);
-                    console.log(context.parsed.y);
                     return label;
                   },
                 },
@@ -77,7 +76,6 @@ export default function TransactionsChart({
               y: {
                 ticks: {
                   callback: function (value) {
-                    console.log(value);
                     return formatToUSD(+value);
                   },
                 },
