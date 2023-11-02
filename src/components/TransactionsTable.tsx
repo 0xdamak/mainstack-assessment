@@ -1,8 +1,7 @@
 import * as Yup from "yup";
-import { useFormik } from "formik";
 import { type IFilterOptions } from "../models/filterOptions";
 import { type ITransaction } from "../models/transaction";
-import FilterControls from "./FilterControls";
+import { useFormik } from "formik";
 import { BaseButton } from "./UI/Buttons";
 import { formatToUSD } from "../helpers/formatToUSD";
 import { formatDate } from "../helpers/formatDate";
@@ -10,6 +9,8 @@ import { clsx } from "clsx";
 import { status } from "../helpers/transactionStatuses";
 import { types } from "../helpers/transactionTypes";
 import { countActiveFilters } from "../helpers/countActiveFilters";
+import dayjs from "dayjs";
+import FilterControls from "./FilterControls";
 import ActivityIndicator from "./UI/ActivityIndicator";
 import ErrorMessage from "./UI/ErrorMessage";
 import ChevronDown from "@/public/svgs/chevron-down.svg?svgr";
@@ -17,7 +18,6 @@ import Receipt from "@/public/svgs/receipt.svg?svgr";
 import ArrowInward from "@/public/svgs/arrow-inward.svg?svgr";
 import ArrowOutward from "@/public/svgs/arrow-outward.svg?svgr";
 import Export from "@/public/svgs/export.svg?svgr";
-import dayjs from "dayjs";
 
 interface Props {
   transactions: ITransaction[] | null;
