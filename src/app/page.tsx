@@ -12,11 +12,16 @@ import WalletInfo from "../components/WalletInfo";
 import TransactionsChart from "../components/TransactionsChart";
 import TransactionsTable from "../components/TransactionsTable";
 import PageLoader from "../components/UI/PageLoader";
+import ErrorMessage from "../components/UI/ErrorMessage";
 
 export default function Home(): JSX.Element {
   const [filtersDialog, setFiltersDialog] = useState(false);
   const [transactions, setTransactions] = useState<ITransaction[] | null>(null);
-  const { data: user, isLoading: loadingUser } = useGetUserQuery();
+  const {
+    data: user,
+    isLoading: loadingUser,
+    isError: userError,
+  } = useGetUserQuery();
   const {
     data: allTransactions,
     isLoading: loadingTransactions,
@@ -47,6 +52,7 @@ export default function Home(): JSX.Element {
   }, [allTransactions]);
 
   if (user === undefined && loadingUser) return <PageLoader />;
+  if (user === undefined && userError) return <ErrorMessage />;
 
   return (
     <>
