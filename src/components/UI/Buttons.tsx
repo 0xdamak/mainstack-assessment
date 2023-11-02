@@ -11,11 +11,13 @@ type Type = "button" | "submit" | "reset" | "link";
 type BaseButtonTypeProps = HTMLMotionProps<"button"> & {
   color?: "primary" | "secondary" | "white";
   className?: string;
+  badgeNumber?: number;
 };
 
 type BaseLinkTypeProps = LinkProps & {
   color?: "primary" | "secondary" | "white";
   className?: string;
+  badgeNumber?: number;
 };
 
 type BaseButtonProps = {
@@ -37,6 +39,7 @@ export function BaseButton({
   type,
   text,
   className,
+  badgeNumber,
   color = "primary",
   ...props
 }: BaseButtonProps): JSX.Element {
@@ -68,6 +71,11 @@ export function BaseButton({
       className={classes}
     >
       {text}
+      {badgeNumber !== undefined && (
+        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-black-300 text-xs text-white">
+          {badgeNumber}
+        </span>
+      )}
       {icon}
     </motion.button>
   );
