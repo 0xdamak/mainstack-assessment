@@ -4,12 +4,13 @@ import { BaseButton } from "./UI/Buttons";
 import { formatToUSD } from "../helpers/formatToUSD";
 import { formatDate } from "../helpers/formatDate";
 import { clsx } from "clsx";
+import ActivityIndicator from "./UI/ActivityIndicator";
+import ErrorMessage from "./UI/ErrorMessage";
 import ChevronDown from "@/public/svgs/chevron-down.svg?svgr";
+import Receipt from "@/public/svgs/receipt.svg?svgr";
 import ArrowInward from "@/public/svgs/arrow-inward.svg?svgr";
 import ArrowOutward from "@/public/svgs/arrow-outward.svg?svgr";
 import Export from "@/public/svgs/export.svg?svgr";
-import ActivityIndicator from "./UI/ActivityIndicator";
-import ErrorMessage from "./UI/ErrorMessage";
 
 interface Props {
   transactions: ITransaction[] | null;
@@ -61,52 +62,68 @@ export default function TransactionsTable({
             <BaseButton text="Export List" icon={<Export />} />
           </div>
         </header>
-        <ul className="my-8 space-y-6">
-          {transactions?.map((transaction, index) => (
-            <li key={index} className="flex items-center gap-4">
-              <div
-                className={clsx(
-                  " flex h-12 w-12 shrink-0 items-center justify-center rounded-full",
-                  {
-                    "bg-jade-100": transaction.type === "deposit",
-                    "bg-red-100": transaction.type === "withdrawal",
-                  },
-                )}
-              >
-                {transaction.type === "deposit" && <ArrowInward />}
-                {transaction.type === "withdrawal" && <ArrowOutward />}
-              </div>
-              <div>
-                <h2 className="text-sm font-medium xs:text-base">
-                  {transaction.metadata?.product_name ?? "Cash withdrawal"}
-                </h2>
-                <p
+        {transactions !== null && transactions?.length > 0 && (
+          <ul className="my-8 space-y-6">
+            {transactions?.map((transaction, index) => (
+              <li key={index} className="flex items-center gap-4">
+                <div
                   className={clsx(
-                    "text-sm font-normal capitalize text-gray-400 xs:font-medium",
+                    " flex h-12 w-12 shrink-0 items-center justify-center rounded-full",
                     {
-                      "text-jade-400":
-                        transaction.metadata === undefined &&
-                        transaction.status === "successful",
-                      "text-yellow-400":
-                        transaction.metadata === undefined &&
-                        transaction.status === "pending",
+                      "bg-jade-100": transaction.type === "deposit",
+                      "bg-red-100": transaction.type === "withdrawal",
                     },
                   )}
                 >
-                  {transaction.metadata?.name ?? transaction.status}
-                </p>
-              </div>
-              <div className="ml-auto text-right">
-                <h2 className="text-sm font-bold xs:text-base">
-                  {formatToUSD(transaction.amount)}
-                </h2>
-                <p className="text-sm font-normal text-gray-400 xs:font-medium">
-                  {formatDate(transaction.date)}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+                  {transaction.type === "deposit" && <ArrowInward />}
+                  {transaction.type === "withdrawal" && <ArrowOutward />}
+                </div>
+                <div>
+                  <h2 className="text-sm font-medium xs:text-base">
+                    {transaction.metadata?.product_name ?? "Cash withdrawal"}
+                  </h2>
+                  <p
+                    className={clsx(
+                      "text-sm font-normal capitalize text-gray-400 xs:font-medium",
+                      {
+                        "text-jade-400":
+                          transaction.metadata === undefined &&
+                          transaction.status === "successful",
+                        "text-yellow-400":
+                          transaction.metadata === undefined &&
+                          transaction.status === "pending",
+                      },
+                    )}
+                  >
+                    {transaction.metadata?.name ?? transaction.status}
+                  </p>
+                </div>
+                <div className="ml-auto text-right">
+                  <h2 className="text-sm font-bold xs:text-base">
+                    {formatToUSD(transaction.amount)}
+                  </h2>
+                  <p className="text-sm font-normal text-gray-400 xs:font-medium">
+                    {formatDate(transaction.date)}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        {transactions?.length === 0 && (
+          <div className="mx-auto max-w-sm py-24">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gray-50">
+              <Receipt />
+            </div>
+            <h1 className="mb-2 text-2.5xl font-bold">
+              No matching transaction found for the selected filter
+            </h1>
+            <p className="mb-8 text-base font-medium">
+              Change your filters to see more results, or add a new product.
+            </p>
+            <BaseButton text="Clear Filter" />
+          </div>
+        )}
       </section>
       <FilterControls
         display={display}
