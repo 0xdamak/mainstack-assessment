@@ -35,9 +35,15 @@ export default function TransactionsChart({
       <div className="mb-8 flex items-end">
         <div>
           <p className="text-sm text-gray-400">Available Balance</p>
-          <h1 className="text-2.5xl font-bold">{formatToUSD(125000)}</h1>
+          <h1 className="text-2xl font-bold sm:text-2.5xl">
+            {formatToUSD(125000)}
+          </h1>
         </div>
-        <BaseButton text="Withdraw" color="secondary" className="ml-16" />
+        <BaseButton
+          text="Withdraw"
+          color="secondary"
+          className="ml-auto sm:ml-16"
+        />
       </div>
       <div className="w-full">
         <LineChart

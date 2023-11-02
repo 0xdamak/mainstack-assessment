@@ -53,7 +53,7 @@ export default function Home(): JSX.Element {
       <TopNav />
       <main className="mx-auto max-w-6xl p-4 xs:p-8">
         <QuickActions />
-        <div className="mb-20 flex flex-col items-center justify-between gap-4 md:flex-row">
+        <div className="mb-20 flex flex-col items-center justify-between gap-12 md:flex-row md:gap-4">
           <TransactionsChart transactions={transactions} />
           <WalletInfo
             wallet={wallet}

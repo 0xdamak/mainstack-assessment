@@ -77,12 +77,12 @@ export default function TransactionsTable({
                 {transaction.type === "withdrawal" && <ArrowOutward />}
               </div>
               <div>
-                <h2 className="text-base font-medium">
+                <h2 className="text-sm font-medium xs:text-base">
                   {transaction.metadata?.product_name ?? "Cash withdrawal"}
                 </h2>
                 <p
                   className={clsx(
-                    "text-sm font-medium capitalize text-gray-400",
+                    "text-sm font-normal capitalize text-gray-400 xs:font-medium",
                     {
                       "text-jade-400":
                         transaction.metadata === undefined &&
@@ -97,10 +97,10 @@ export default function TransactionsTable({
                 </p>
               </div>
               <div className="ml-auto text-right">
-                <h2 className="text-base font-bold">
+                <h2 className="text-sm font-bold xs:text-base">
                   {formatToUSD(transaction.amount)}
                 </h2>
-                <p className="text-sm font-medium text-gray-400">
+                <p className="text-sm font-normal text-gray-400 xs:font-medium">
                   {formatDate(transaction.date)}
                 </p>
               </div>

@@ -17,7 +17,7 @@ export default function QuickActions(): JSX.Element {
   ];
 
   return (
-    <ul className="fixed left-0 top-1/2 flex h-48 w-12 -translate-y-1/2 flex-col items-center justify-evenly rounded-b-7xl bg-white shadow-quick-action duration-300">
+    <ul className="fixed left-0 top-1/2 mx-4 flex h-48 w-12 -translate-y-1/2 flex-col items-center justify-evenly rounded-7xl bg-white shadow-quick-action duration-300">
       {actions.map((action, index) => (
         <li
           key={index}
