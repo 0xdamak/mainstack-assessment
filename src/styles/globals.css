@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "./fonts.css";
+
+body {
+  @apply bg-white;
+  @apply font-TomatoGrotesk;
+  @apply text-black-300;
+}
