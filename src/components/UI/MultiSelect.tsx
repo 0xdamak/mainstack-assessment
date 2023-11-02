@@ -1,5 +1,7 @@
 import { Listbox, Transition } from "@headlessui/react";
 import ChevronDown from "@/public/svgs/chevron-down.svg?svgr";
+import CheckMark from "@/public/svgs/check-mark.svg?svgr";
+import clsx from "clsx";
 
 interface Props<S> {
   options: readonly S[];
@@ -40,13 +42,25 @@ export default function MultiSelect({
         className="relative z-10"
       >
         <Listbox.Options className="absolute mt-1 w-full bg-white p-2 shadow-quick-action">
-          {options.map((type) => (
+          {options.map((option) => (
             <Listbox.Option
-              key={type}
-              value={type}
-              className="rounded-lg p-3 text-base font-semibold capitalize duration-300 hover:bg-gray-50"
+              key={option}
+              value={option}
+              className="flex items-center gap-3 rounded-lg p-3 text-base font-semibold capitalize duration-300 hover:bg-gray-50"
             >
-              {type.replace(/_/g, " ")}
+              <div
+                className={clsx(
+                  "flex h-4 w-4 cursor-pointer items-center justify-center rounded-sm border border-gray-400",
+                  {
+                    "border-black-300 bg-black-300": value.includes(option),
+                  },
+                )}
+              >
+                {value.includes(option) && (
+                  <CheckMark className="stroke-white" />
+                )}
+              </div>
+              <span>{option.replace(/_/g, " ")}</span>
             </Listbox.Option>
           ))}
         </Listbox.Options>
